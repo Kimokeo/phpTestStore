@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 <?php 
-$pageTitle = "Contact Mike";
+$pageTitle = "Contact Me";
 $section = "contact";
 include('inc/header.php'); ?>
 

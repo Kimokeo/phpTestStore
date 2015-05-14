@@ -11,7 +11,7 @@ include('inc/header.php'); ?>
 
 		</div>
 
-		<div class="section shirts latest">
+		<div class="section products latest">
 
 			<div class="wrapper">
 
@@ -19,22 +19,22 @@ include('inc/header.php'); ?>
 
 				<ul class="products">
 					<li><a href="#">
-							<img src="img/shirts/shirt-108.jpg">
+							<img src="img/stock/stars.jpeg">
 							<p>View Details</p>
 						</a>
 					</li><li>
 						<a href="#">
-							<img src="img/shirts/shirt-107.jpg">
+							<img src="img/stock/subway.jpeg">
 							<p>View Details</p>
 						</a>
 					</li><li>
 						<a href="#">
-							<img src="img/shirts/shirt-106.jpg">
+							<img src="img/stock/street.jpeg">
 							<p>View Details</p>
 						</a>
 					</li><li>
 						<a href="#">
-							<img src="img/shirts/shirt-105.jpg">
+							<img src="img/stock/tiger.jpeg">
 							<p>View Details</p>
 						</a>
 					</li>								
