@@ -1,14 +1,49 @@
 <?php 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST["name"];
-    $email =  $_POST["email"];
-    $message =  $_POST["message"];
+    $name = trim($_POST["name"]);
+    $email =  trim($_POST["email"]);
+    $message =  trim($_POST["message"]);
+
+    if ($name == "" OR $email == "") {
+        echo "You must specify a name and an Email address";
+        exit;
+    }
+#Check for malicious bot spam
+    foreach( $_POST as $value){
+        if( stripos($value,'Content-Type:') !== FALSE){
+            echo "There was an error with your message";
+            exit;
+        }
+
+    }
+    if ($_POST["address"] != "") {
+        echo "Thanks spam bot";
+        exit;
+    }
+
+    require_once('vendor/phpmailer/phpmailer/class.phpmailer.php');
+        $mail = new PHPMailer();
+
+        if (!$mail->ValidateAddress($email)){
+            echo "Invalid Email Address";
+            exit;
+        }
+
     $email_body = "";
     $email_body = $email_body . "Name: " . $name . "\n";
     $email_body = $email_body . "Email: " . $email . "\n";
     $email_body = $email_body . "Message: " . $message;
 
-    // TODO: Send Email
+    $mail->SetFrom($email, $name);
+    $address = "orders@printsnstuff.com";
+    $mail->AddAddress($address, "Prints n Stuff");
+    $mail->Subject    = "Prints n Stuff Contact Form Submission | " . $name;
+    $mail->MsgHTML($email_body);
+
+    if(!$mail->Send()) {
+      echo "There was a problem sending the email: " . $mail->ErrorInfo;
+      exit;
+    }
 
     header("Location: contact.php?status=thanks");
     exit;
@@ -57,7 +92,15 @@ include('inc/header.php'); ?>
                             <td>
                                 <textarea name="message" id="message"></textarea>
                             </td>
-                        </tr>                    
+                        </tr> 
+                        <tr style="display: none;">
+                            <th>
+                                <label for="address">Address</label>
+                            </th>
+                            <td>
+                                <input type="text" name="address" id="address">
+                            </td>
+                        </tr>                   
                     </table>
                     <input type="submit" value="Send">
 

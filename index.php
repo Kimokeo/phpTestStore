@@ -16,28 +16,20 @@ include('inc/header.php'); ?>
 			<div class="wrapper">
 
 				<h2>Latest Products</h2>
-
+				<?php include("inc/products.php"); ?>
 				<ul class="products">
-					<li><a href="#">
-							<img src="img/stock/stars.jpeg">
-							<p>View Details</p>
-						</a>
-					</li><li>
-						<a href="#">
-							<img src="img/stock/subway.jpeg">
-							<p>View Details</p>
-						</a>
-					</li><li>
-						<a href="#">
-							<img src="img/stock/street.jpeg">
-							<p>View Details</p>
-						</a>
-					</li><li>
-						<a href="#">
-							<img src="img/stock/tiger.jpeg">
-							<p>View Details</p>
-						</a>
-					</li>								
+					<?php 
+						$total_products = count($products);
+						$position = 0;
+						$list_view_html = "";
+						foreach($products as $product_id => $product) { 
+							$position = $position + 1;
+							if ($total_products - $position < 4) {
+								$list_view_html = $list_view_html . get_list_view_html($product_id, $product);
+							}
+						}
+						echo $list_view_html;
+					?>
 				</ul>
 
 			</div>
