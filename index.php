@@ -1,4 +1,6 @@
 <?php 
+require_once("inc/config.php");
+include(ROOT_PATH . "inc/products.php");
 $pageTitle = "Prints n Stuff";
 include('inc/header.php'); ?>
 

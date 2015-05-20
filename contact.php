@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(!$mail->Send()) {
       echo "There was a problem sending the email: " . $mail->ErrorInfo;
       exit;
-    }
+      }
 
     header("Location: contact.php?status=thanks");
     exit;

@@ -17,7 +17,7 @@
 				<h2><a href="contact.php" style="color:black" class='<?php if ($section == "contact") {echo "on";}?>'>Contact</a></h2>
 				</div>
 				<div class="medium-2 columns">
-				<h2><a href="#" style="color:black" >Cart</a></h2>
+				<h2><a target="paypal" href="https://www.paypal.com/cgi-bin/webscr?cmd=_cart&business=7HYMCJCSYTRT4&display=1" style="color:black" >Cart</a></h2>
 				</div>
 			
 	</div>
