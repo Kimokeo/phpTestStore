@@ -4,50 +4,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email =  trim($_POST["email"]);
     $message =  trim($_POST["message"]);
 
-    if ($name == "" OR $email == "") {
-        echo "You must specify a name and an Email address";
-        exit;
+    if ($name == "" OR $email == "" OR $message == "") {
+        $error_message = "Please specify a Name, Email address, and Message";
     }
 #Check for malicious bot spam
     foreach( $_POST as $value){
         if( stripos($value,'Content-Type:') !== FALSE){
-            echo "There was an error with your message";
-            exit;
+            $error_message = "There was an error with your message";
         }
 
     }
+#Honey pot check for auto-form bots
     if ($_POST["address"] != "") {
-        echo "Thanks spam bot";
-        exit;
+        $error_message = "Thanks spam bot";
     }
 
     require_once('vendor/phpmailer/phpmailer/class.phpmailer.php');
         $mail = new PHPMailer();
 
         if (!$mail->ValidateAddress($email)){
-            echo "Invalid Email Address";
-            exit;
+            $error_message = "Invalid Email Address";
         }
+    if (!isset($error_message)) {
+        $email_body = "";
+        $email_body = $email_body . "Name: " . $name . "\n";
+        $email_body = $email_body . "Email: " . $email . "\n";
+        $email_body = $email_body . "Message: " . $message;
 
-    $email_body = "";
-    $email_body = $email_body . "Name: " . $name . "\n";
-    $email_body = $email_body . "Email: " . $email . "\n";
-    $email_body = $email_body . "Message: " . $message;
+        $mail->SetFrom($email, $name);
+        $address = "orders@printsnstuff.com";
+        $mail->AddAddress($address, "Prints n Stuff");
+        $mail->Subject    = "Prints n Stuff Contact Form Submission | " . $name;
+        $mail->MsgHTML($email_body);
 
-    $mail->SetFrom($email, $name);
-    $address = "orders@printsnstuff.com";
-    $mail->AddAddress($address, "Prints n Stuff");
-    $mail->Subject    = "Prints n Stuff Contact Form Submission | " . $name;
-    $mail->MsgHTML($email_body);
-
-    if(!$mail->Send()) {
-      echo "There was a problem sending the email: " . $mail->ErrorInfo;
-      exit;
-      }
-
-    header("Location: contact.php?status=thanks");
-    exit;
+        if($mail->Send()) {
+            header("Location: contact.php?status=thanks");
+            exit;
+          } else {
+            $error_message = "There was a problem sending the email: " . $mail->ErrorInfo;
+          }
+    }
 }
+
 ?>
 <?php 
 $pageTitle = "Contact Me";
@@ -64,8 +62,13 @@ include('inc/header.php'); ?>
                 <p>Thanks for the email! I&rsquo;ll be in touch shortly!</p>
             <?php } else { ?>
 
-                <p>I&rsquo;d love to hear from you! Complete the form to send me an email.</p>
-
+                <?php
+                    if(!isset($error_message)){
+                        echo "<p>I&rsquo;d love to hear from you! Complete the form to send me an email.</p>";
+                    } else {    
+                        echo '<p class="message">' . $error_message . '</p>';
+                    }
+                ?>
                 <form method="post" action="contact.php">
 
                     <table>
@@ -74,7 +77,7 @@ include('inc/header.php'); ?>
                                 <label for="name">Name</label>
                             </th>
                             <td>
-                                <input type="text" name="name" id="name">
+                                <input type="text" name="name" id="name" value="<?php if(isset($name)){echo htmlspecialchars($name);}?>">
                             </td>
                         </tr>
                         <tr>
@@ -82,7 +85,7 @@ include('inc/header.php'); ?>
                                 <label for="email">Email</label>
                             </th>
                             <td>
-                                <input type="text" name="email" id="email">
+                                <input type="text" name="email" id="email" value="<?php if(isset($email)){echo htmlspecialchars($email);}?>">
                             </td>
                         </tr>
                         <tr>
@@ -90,7 +93,7 @@ include('inc/header.php'); ?>
                                 <label for="message">Message</label>
                             </th>
                             <td>
-                                <textarea name="message" id="message"></textarea>
+                                <textarea name="message" id="message"><?php if(isset($message)){echo htmlspecialchars($message);}?></textarea>
                             </td>
                         </tr> 
                         <tr style="display: none;">

@@ -16,7 +16,7 @@ function get_list_view_html($product_id, $product) {
 
     
     try {
-        require("inc/database.php");
+        require("database.php");
         $results = $db->query("SELECT name, price, img, sku FROM products");
     } catch (Exception $e) {
         echo "query failed";
